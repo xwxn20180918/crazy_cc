@@ -1,0 +1,148 @@
+{
+  "groups": [
+    {
+      "name": "security",
+      "type": "com.crazy.cc.framework.config.SecurityProperties",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "swagger",
+      "type": "com.crazy.cc.framework.config.SwaggerProperties",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "web",
+      "type": "com.crazy.cc.framework.config.WebProperties",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties"
+    },
+    {
+      "name": "web.admin-api",
+      "type": "com.crazy.cc.framework.config.WebProperties$Api",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties",
+      "sourceMethod": "getAdminApi()"
+    },
+    {
+      "name": "web.admin-ui",
+      "type": "com.crazy.cc.framework.config.WebProperties$Ui",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties",
+      "sourceMethod": "getAdminUi()"
+    },
+    {
+      "name": "web.app-api",
+      "type": "com.crazy.cc.framework.config.WebProperties$Api",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties",
+      "sourceMethod": "getAppApi()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "security.mock-enable",
+      "type": "java.lang.Boolean",
+      "description": "mock 模式的开关",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "security.mock-secret",
+      "type": "java.lang.String",
+      "description": "mock 模式的密钥 一定要配置密钥，保证安全性",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "security.password-encoder-length",
+      "type": "java.lang.Integer",
+      "description": "PasswordEncoder 加密复杂度，越高开销越大",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "security.permit-all-urls",
+      "type": "java.util.List<java.lang.String>",
+      "description": "免登录的 URL 列表",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "security.token-header",
+      "type": "java.lang.String",
+      "description": "HTTP 请求时，访问令牌的请求 Header",
+      "sourceType": "com.crazy.cc.framework.config.SecurityProperties"
+    },
+    {
+      "name": "swagger.author",
+      "type": "java.lang.String",
+      "description": "作者",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.description",
+      "type": "java.lang.String",
+      "description": "描述",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.email",
+      "type": "java.lang.String",
+      "description": "email",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.license",
+      "type": "java.lang.String",
+      "description": "license",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.license-url",
+      "type": "java.lang.String",
+      "description": "license-url",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.title",
+      "type": "java.lang.String",
+      "description": "标题",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.url",
+      "type": "java.lang.String",
+      "description": "url",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "swagger.version",
+      "type": "java.lang.String",
+      "description": "版本",
+      "sourceType": "com.crazy.cc.framework.config.SwaggerProperties"
+    },
+    {
+      "name": "web.admin-api.controller",
+      "type": "java.lang.String",
+      "description": "Controller 所在包的 Ant 路径规则 主要目的是，给该 Controller 设置指定的 {@link #prefix}",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties$Api"
+    },
+    {
+      "name": "web.admin-api.prefix",
+      "type": "java.lang.String",
+      "description": "API 前缀，实现所有 Controller 提供的 RESTFul API 的统一前缀 意义：通过该前缀，避免 Swagger、Actuator 意外通过 Nginx 暴露出来给外部，带来安全性问题      这样，Nginx 只需要配置转发到 \/api\/* 的所有接口即可。 @see CCWebAutoConfiguration#configurePathMatch(PathMatchConfigurer)",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties$Api"
+    },
+    {
+      "name": "web.admin-ui.url",
+      "type": "java.lang.String",
+      "description": "访问地址",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties$Ui"
+    },
+    {
+      "name": "web.app-api.controller",
+      "type": "java.lang.String",
+      "description": "Controller 所在包的 Ant 路径规则 主要目的是，给该 Controller 设置指定的 {@link #prefix}",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties$Api"
+    },
+    {
+      "name": "web.app-api.prefix",
+      "type": "java.lang.String",
+      "description": "API 前缀，实现所有 Controller 提供的 RESTFul API 的统一前缀 意义：通过该前缀，避免 Swagger、Actuator 意外通过 Nginx 暴露出来给外部，带来安全性问题      这样，Nginx 只需要配置转发到 \/api\/* 的所有接口即可。 @see CCWebAutoConfiguration#configurePathMatch(PathMatchConfigurer)",
+      "sourceType": "com.crazy.cc.framework.config.WebProperties$Api"
+    }
+  ],
+  "hints": []
+}
