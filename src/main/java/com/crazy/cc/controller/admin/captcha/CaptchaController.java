@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Tag(name = "管理后台 - 验证码")
 @RestController
-@RequestMapping("/system/captcha")
+@RequestMapping("/admin-api/system/captcha")
 public class CaptchaController {
     @Resource
     private CaptchaService captchaService;
