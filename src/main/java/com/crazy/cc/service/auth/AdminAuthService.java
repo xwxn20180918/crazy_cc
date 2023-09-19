@@ -7,4 +7,6 @@ import javax.validation.Valid;
 
 public interface AdminAuthService {
     AuthLoginRespVO login(@Valid AuthLoginReqVO reqVO);
+
+    AuthLoginRespVO refreshToken(String refreshToken);
 }

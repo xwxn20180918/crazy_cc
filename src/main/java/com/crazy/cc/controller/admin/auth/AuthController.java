@@ -4,13 +4,11 @@ import com.crazy.cc.controller.admin.auth.vo.AuthLoginReqVO;
 import com.crazy.cc.controller.admin.auth.vo.AuthLoginRespVO;
 import com.crazy.cc.framework.common.pojo.CommonResult;
 import com.crazy.cc.service.auth.AdminAuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -30,7 +28,15 @@ public class AuthController {
 
     @PostMapping("/login")
     @PermitAll
+    @Operation(summary = "使用账号密码登录")
     public CommonResult<AuthLoginRespVO> login(@RequestBody @Valid AuthLoginReqVO reqVO) {
         return success(authService.login(reqVO));
+    }
+
+    @PostMapping("/refresh-token")
+    @PermitAll
+    @Operation(summary = "刷新令牌")
+    public CommonResult<AuthLoginRespVO> refreshToken(@RequestParam("refreshToken") String refreshToken) {
+        return success(authService.refreshToken(refreshToken));
     }
 }

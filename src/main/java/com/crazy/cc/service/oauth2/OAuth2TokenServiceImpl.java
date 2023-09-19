@@ -1,9 +1,13 @@
 package com.crazy.cc.service.oauth2;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.crazy.cc.dal.dataobject.OAuth2.OAuth2AccessTokenDO;
 import com.crazy.cc.dal.mysql.oauth2.OAuth2AccessTokenMapper;
 import com.crazy.cc.dal.mysql.oauth2.OAuth2RefreshTokenMapper;
+import com.crazy.cc.framework.common.exception.enums.GlobalErrorCodeConstants;
+import com.crazy.cc.framework.common.util.date.DateUtils;
 import com.crazy.cc.service.oauth2.dto.OAuth2ClientDO;
 import com.crazy.cc.service.oauth2.dto.OAuth2RefreshTokenDO;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.crazy.cc.framework.common.exception.util.ServiceExceptionUtil.exception0;
+import static com.crazy.cc.framework.common.util.collection.CollectionUtils.convertSet;
 
 @Service
 public class OAuth2TokenServiceImpl implements OAuth2TokenService {
@@ -31,6 +38,30 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
         OAuth2RefreshTokenDO refreshTokenDO = createOAuth2RefreshToken(userId, userType, oAuth2ClientDO, scopes);
 
         return createOAuth2AccessToken(refreshTokenDO, oAuth2ClientDO);
+    }
+
+    @Override
+    public OAuth2AccessTokenDO refreshAccessToken(String refreshToken, String clientId) {
+        OAuth2RefreshTokenDO refreshTokenDO = oAuth2RefreshTokenMapper.selectByRefreshToken(refreshToken);
+        if (refreshTokenDO == null) {
+            throw exception0(GlobalErrorCodeConstants.BAD_REQUEST.getCode(), "无效的刷新令牌");
+        }
+        // 校验 Client 匹配
+        OAuth2ClientDO clientDO = oauth2ClientService.validOAuthClientFromCache(clientId);
+        if (ObjectUtil.notEqual(clientId, refreshTokenDO.getClientId())) {
+            throw exception0(GlobalErrorCodeConstants.BAD_REQUEST.getCode(), "刷新令牌的客户端编号不正确");
+        }
+        // 移除相关的访问令牌
+        List<OAuth2AccessTokenDO> accessTokenDOs = oAuth2AccessTokenMapper.selectListByRefreshToken(refreshToken);
+        if (CollectionUtil.isNotEmpty(accessTokenDOs)) {
+            oAuth2AccessTokenMapper.deleteBatchIds(convertSet(accessTokenDOs, OAuth2AccessTokenDO::getId));
+        }
+        // 已过期的情况下，删除刷新令牌
+        if (DateUtils.isExpired(refreshTokenDO.getExpiresTime())) {
+            oAuth2RefreshTokenMapper.deleteById(refreshTokenDO.getId());
+            throw exception0(GlobalErrorCodeConstants.UNAUTHORIZED.getCode(), "刷新令牌已过期");
+        }
+        return createOAuth2AccessToken(refreshTokenDO, clientDO);
     }
 
     private OAuth2RefreshTokenDO createOAuth2RefreshToken(Long userId, Integer userType, OAuth2ClientDO clientDO, List<String> scopes) {

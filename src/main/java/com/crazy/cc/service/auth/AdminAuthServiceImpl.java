@@ -50,6 +50,18 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         return createTokenAfterLoginSuccess(user.getId(), reqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
     }
 
+    @Override
+    public AuthLoginRespVO refreshToken(String refreshToken) {
+        OAuth2AccessTokenDO accessTokenDO = oAuth2TokenService.refreshAccessToken(refreshToken, "default");
+        // 构建返回结果
+        AuthLoginRespVO authLoginRespVO = new AuthLoginRespVO();
+        authLoginRespVO.setAccessToken(accessTokenDO.getAccessToken());
+        authLoginRespVO.setRefreshToken(accessTokenDO.getRefreshToken());
+        authLoginRespVO.setUserId(accessTokenDO.getUserId());
+        authLoginRespVO.setExpiresTime(accessTokenDO.getExpiresTime());
+        return authLoginRespVO;
+    }
+
     void validateCaptcha(AuthLoginReqVO reqVO) {
         // 校验验证码
         ValidationUtils.validate(validator, reqVO, AuthLoginReqVO.CodeEnableGroup.class);
@@ -85,10 +97,14 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private AuthLoginRespVO createTokenAfterLoginSuccess(Long userId, String username, LoginLogTypeEnum logType) {
         // 插入登录日志 后期处理
         // 创建访问令牌
-        OAuth2AccessTokenDO accessTokenDO = oAuth2TokenService.createAccessToken(userId, getUserType().getValue(), "'default'", null);
+        OAuth2AccessTokenDO accessTokenDO = oAuth2TokenService.createAccessToken(userId, getUserType().getValue(), "default", null);
         // 构建返回结果
-        AuthConvert.INSTANCE.convert(accessTokenDO);
-        return AuthConvert.INSTANCE.convert(accessTokenDO);
+        AuthLoginRespVO authLoginRespVO = new AuthLoginRespVO();
+        authLoginRespVO.setAccessToken(accessTokenDO.getAccessToken());
+        authLoginRespVO.setRefreshToken(accessTokenDO.getRefreshToken());
+        authLoginRespVO.setUserId(accessTokenDO.getUserId());
+        authLoginRespVO.setExpiresTime(accessTokenDO.getExpiresTime());
+        return authLoginRespVO;
     }
 
     private UserTypeEnum getUserType() {
