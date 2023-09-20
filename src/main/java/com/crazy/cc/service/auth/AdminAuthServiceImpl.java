@@ -62,6 +62,13 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         return authLoginRespVO;
     }
 
+    @Override
+    public void logout(String token) {
+        // 删除访问令牌
+        // 删除刷新令牌
+        oAuth2TokenService.removeAccessToken(token);
+    }
+
     void validateCaptcha(AuthLoginReqVO reqVO) {
         // 校验验证码
         ValidationUtils.validate(validator, reqVO, AuthLoginReqVO.CodeEnableGroup.class);

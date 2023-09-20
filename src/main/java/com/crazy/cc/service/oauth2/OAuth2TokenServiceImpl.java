@@ -64,6 +64,15 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
         return createOAuth2AccessToken(refreshTokenDO, clientDO);
     }
 
+    @Override
+    public void removeAccessToken(String token) {
+        OAuth2AccessTokenDO oAuth2AccessTokenDO = oAuth2AccessTokenMapper.selectByAccessToken(token);
+        if (oAuth2AccessTokenDO != null) {
+            oAuth2AccessTokenMapper.deleteById(oAuth2AccessTokenDO.getId());
+            oAuth2RefreshTokenMapper.deleteByRefreshToken(oAuth2AccessTokenDO.getRefreshToken());
+        }
+    }
+
     private OAuth2RefreshTokenDO createOAuth2RefreshToken(Long userId, Integer userType, OAuth2ClientDO clientDO, List<String> scopes) {
         OAuth2RefreshTokenDO oAuth2RefreshTokenDO = new OAuth2RefreshTokenDO();
         oAuth2RefreshTokenDO.setRefreshToken(generateRefreshToken());

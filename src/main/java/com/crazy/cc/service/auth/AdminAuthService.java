@@ -9,4 +9,6 @@ public interface AdminAuthService {
     AuthLoginRespVO login(@Valid AuthLoginReqVO reqVO);
 
     AuthLoginRespVO refreshToken(String refreshToken);
+
+    void logout(String token);
 }

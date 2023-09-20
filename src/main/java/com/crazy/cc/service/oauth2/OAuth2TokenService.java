@@ -22,4 +22,6 @@ public interface OAuth2TokenService {
     OAuth2AccessTokenDO createAccessToken(Long userId, Integer userType, String clientId, List<String> scopes);
 
     OAuth2AccessTokenDO refreshAccessToken(String refreshToken, String clientId);
+
+    void removeAccessToken(String token);
 }
