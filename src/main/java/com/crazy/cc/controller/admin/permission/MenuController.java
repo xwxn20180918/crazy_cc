@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "管理后台 - 菜单")
 @RestController
-@RequestMapping("/admin/api//system/menu")
+@RequestMapping("/admin/api/system/menu")
 @Validated
 public class MenuController {
 }
