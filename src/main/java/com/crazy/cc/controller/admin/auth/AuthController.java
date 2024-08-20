@@ -56,4 +56,9 @@ public class AuthController {
         }
         return success(true);
     }
+    @GetMapping("/test")
+    @PermitAll
+    public CommonResult<String> test() {
+        return success("你一定可以成功");
+    }
 }
